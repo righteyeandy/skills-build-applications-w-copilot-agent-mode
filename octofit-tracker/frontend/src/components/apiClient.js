@@ -4,6 +4,10 @@ const apiBaseUrl = codespaceName
   ? `https://${codespaceName}-8000.app.github.dev/api`
   : 'http://localhost:8000/api';
 
+function buildApiUrl(componentName) {
+  return `${apiBaseUrl}/${componentName}/`;
+}
+
 function normalizeApiData(payload) {
   if (Array.isArray(payload)) {
     return payload;
@@ -32,11 +36,11 @@ function normalizeApiData(payload) {
   return [];
 }
 
-async function fetchCollection(endpoint) {
-  const response = await fetch(`${apiBaseUrl}/${endpoint}/`);
+async function fetchCollectionByUrl(url, endpointLabel = 'collection') {
+  const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${endpoint}: ${response.status}`);
+    throw new Error(`Failed to fetch ${endpointLabel}: ${response.status}`);
   }
 
   const payload = await response.json();
@@ -49,4 +53,4 @@ async function fetchCollection(endpoint) {
   };
 }
 
-export { apiBaseUrl, codespaceName, fetchCollection, normalizeApiData };
+export { apiBaseUrl, buildApiUrl, codespaceName, fetchCollectionByUrl, normalizeApiData };

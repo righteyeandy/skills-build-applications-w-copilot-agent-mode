@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { fetchCollection } from './apiClient';
+import { fetchCollectionByUrl } from './apiClient';
 
 function formatValue(value) {
   if (value === null || value === undefined) {
@@ -25,7 +25,7 @@ function formatValue(value) {
   return String(value);
 }
 
-function CollectionPage({ endpoint, title, subtitle, columns }) {
+function CollectionPage({ endpoint, endpointUrl, title, subtitle, columns }) {
   const [rows, setRows] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ function CollectionPage({ endpoint, title, subtitle, columns }) {
       setError('');
 
       try {
-        const result = await fetchCollection(endpoint);
+        const result = await fetchCollectionByUrl(endpointUrl, endpoint);
 
         if (!active) {
           return;
@@ -64,7 +64,7 @@ function CollectionPage({ endpoint, title, subtitle, columns }) {
     return () => {
       active = false;
     };
-  }, [endpoint]);
+  }, [endpoint, endpointUrl]);
 
   const total = useMemo(() => {
     if (typeof meta?.count === 'number') {
